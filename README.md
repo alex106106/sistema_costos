@@ -9,6 +9,7 @@ El frontend se publica en:
 <https://alex106106.github.io/sistema_costos/>
 
 El workflow de GitHub Actions construye `costos/` y publica `costos/dist` al hacer push a `main`.
+Después del primer push, abre **Settings → Pages** en el repositorio y selecciona **GitHub Actions** como fuente de publicación.
 
 GitHub Pages solo aloja el frontend estático. El procesamiento de PDF requiere el servidor Node.js de `backend/`, que debe desplegarse por separado. Hasta configurar una URL HTTPS para esa API, la interfaz publicada mostrará un aviso y no procesará archivos.
 
