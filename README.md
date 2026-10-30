@@ -11,9 +11,16 @@ El frontend se publica en:
 El workflow de GitHub Actions construye `costos/` y publica `costos/dist` al hacer push a `main`.
 Después del primer push, abre **Settings → Pages** en el repositorio y selecciona **GitHub Actions** como fuente de publicación.
 
-GitHub Pages solo aloja el frontend estático. El procesamiento de PDF requiere el servidor Node.js de `backend/`, que debe desplegarse por separado. Hasta configurar una URL HTTPS para esa API, la interfaz publicada mostrará un aviso y no procesará archivos.
+GitHub Pages solo aloja el frontend estático. El procesamiento de PDF requiere el servidor Node.js de `backend/`. El archivo `render.yaml` permite desplegarlo en Render usando **New → Blueprint** y conectar este repositorio.
 
-Para activar la API, configura `VITE_API_BASE_URL` en los secretos o variables de GitHub Actions con el origen HTTPS del backend y configura CORS en el backend para permitir el dominio de Pages. No incluyas tokens ni credenciales en variables `VITE_*`, porque quedan visibles en el JavaScript público.
+Después de crear el servicio de Render:
+
+1. Copia su URL pública HTTPS, por ejemplo `https://sistema-costos-api.onrender.com`.
+2. En GitHub, abre **Settings → Secrets and variables → Actions → Variables → New repository variable**.
+3. Crea `VITE_API_BASE_URL` con el origen del servicio, sin agregar `/api/pdf/process`.
+4. Vuelve a ejecutar el workflow **Deploy frontend to GitHub Pages** en **Actions**. El siguiente push a `main` también lo ejecutará.
+
+Render configura `CORS_ORIGIN` para permitir el dominio de Pages. El backend recibe los PDFs para procesarlos en Render, elimina el archivo temporal al terminar la solicitud y rechaza cargas mayores de 20 MB. El servicio gratuito puede tardar unos segundos en despertar después de estar inactivo. La interfaz seguirá mostrando el aviso hasta completar estos pasos y el nuevo despliegue. No incluyas tokens ni credenciales en variables `VITE_*`, porque quedan visibles en el JavaScript público.
 
 ## Desarrollo local
 
